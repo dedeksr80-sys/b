@@ -1,0 +1,175 @@
+/* ==========================================================================
+   Reset & Base Styles
+   ========================================================================== */
+:root {
+    --bg-gradient: linear-gradient(135deg, #1a1c29 0%, #0d0e15 100%);
+    --petal-color: #ff6b8b;
+    --petal-color-inner: #ff8e9e;
+    --flower-center-color: #feca57;
+    --stem-color: #1dd1a1;
+    --pot-color: #ee5253;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg-gradient);
+    font-family: system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+}
+
+.garden-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+/* ==========================================================================
+   Komponen Bunga (Flower Structure)
+   ========================================================================== */
+.flower {
+    position: relative;
+    width: 200px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Batang Bunga */
+.stem {
+    position: absolute;
+    bottom: 80px;
+    width: 8px;
+    height: 0; /* Mulai dari 0 untuk animasi tumbuh */
+    background: var(--stem-color);
+    border-radius: 4px;
+    transition: height 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Daun */
+.leaf {
+    position: absolute;
+    width: 30px;
+    height: 15px;
+    background: var(--stem-color);
+    border-radius: 0 15px 0 15px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.leaf-left {
+    top: 40%;
+    left: -25px;
+    transform: rotate(-30px);
+}
+
+.leaf-right {
+    top: 60%;
+    right: -25px;
+    transform: scaleX(-1) rotate(-30deg); /* Membalik daun ke kanan */
+}
+
+/* Inti Tengah Bunga */
+.flower-center {
+    position: absolute;
+    top: 100px;
+    width: 40px;
+    height: 40px;
+    background: var(--flower-center-color);
+    border-radius: 50%;
+    z-index: 10;
+    transform: scale(0);
+    transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 15px rgba(254, 202, 87, 0.5);
+}
+
+/* Wadah Kelopak */
+.petals-container {
+    position: absolute;
+    top: 120px; /* Titik pusat pertumbuhan */
+    width: 0;
+    height: 0;
+}
+
+/* Struktur Kelopak Tunggal */
+.petal {
+    position: absolute;
+    top: -60px;
+    left: -20px;
+    width: 40px;
+    height: 70px;
+    background: linear-gradient(to bottom, var(--petal-color), var(--petal-color-inner));
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    transform-origin: bottom center;
+    transform: rotate(var(--angle)) scale(0);
+    transition: transform 1.2s cubic-bezier(0.5, 1.5, 0.5, 1);
+    opacity: 0.9;
+}
+
+/* Pot Bunga */
+.pot {
+    position: absolute;
+    bottom: 0;
+    width: 100px;
+    height: 80px;
+    background: var(--pot-color);
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+    box-shadow: inset 0 10px 10px rgba(0,0,0,0.2);
+}
+
+/* ==========================================================================
+   State Perubahan (Mekar) / Triggered by JS
+   ========================================================================== */
+.flower.bloomed .stem {
+    height: 180px;
+}
+
+.flower.bloomed .leaf {
+    opacity: 1;
+    transition-delay: 1s;
+}
+
+.flower.bloomed .flower-center {
+    transform: scale(1);
+    transition-delay: 1.2s;
+}
+
+.flower.bloomed .petal {
+    /* Mengembalikan skala ke 1 dengan rotasi masing-masing variabel */
+    transform: rotate(var(--angle)) scale(1);
+    transition-delay: calc(1.4s + (var(--i) * 0.05s)); /* Efek mekar bergantian */
+}
+
+/* ==========================================================================
+   UI Button
+   ========================================================================== */
+.btn {
+    background: #ff6b8b;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 107, 139, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: #ff4771;
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
